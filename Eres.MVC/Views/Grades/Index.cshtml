@@ -5,7 +5,21 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>Index</h2>
+
+<h2>Grades</h2>
+
+@if (TempData["Error"] != null)
+{
+    
+    <div class="alert alert-danger fade in">
+        @{
+            var error = TempData["Error"].ToString();
+        }
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+        <strong>@error</strong>
+    </div>
+        
+}
 
 <p>
     @Html.ActionLink("Create New", "Create")

@@ -123,6 +123,8 @@
     <Compile Include="Controllers\GradesController.cs" />
     <Compile Include="Controllers\GradesValuesController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\ProfessorFormController.cs" />
+    <Compile Include="Controllers\StudentFormController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -159,17 +161,22 @@
     <Content Include="Scripts\jquery-1.10.2.min.map" />
     <Content Include="Views\Grades\Create.cshtml" />
     <Content Include="Views\Grades\Delete.cshtml" />
-    <Content Include="Views\Grades\Details.cshtml" />
     <Content Include="Views\Grades\Edit.cshtml" />
     <Content Include="Views\Grades\Index.cshtml" />
     <Content Include="Views\GradesValues\Create.cshtml" />
     <Content Include="Views\GradesValues\Delete.cshtml" />
-    <Content Include="Views\GradesValues\Details.cshtml" />
     <Content Include="Views\GradesValues\Edit.cshtml" />
     <Content Include="Views\GradesValues\ProfessorView.cshtml" />
     <Content Include="Views\GradesValues\StudentView.cshtml" />
     <Content Include="Views\Grades\SelectSemester.cshtml" />
     <Content Include="Views\Grades\SelectSubject.cshtml" />
+    <Content Include="Views\StudentForm\SelectStudent.cshtml" />
+    <Content Include="Views\StudentForm\SelectSemester.cshtml" />
+    <Content Include="Views\StudentForm\SelectSubject.cshtml" />
+    <Content Include="Views\ProfessorForm\SelectSemester.cshtml" />
+    <Content Include="Views\ProfessorForm\SelectSubject.cshtml" />
+    <Content Include="Views\ProfessorForm\SelectGrade.cshtml" />
+    <Content Include="Views\GradesValues\SelectStudent.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Eres.NET\EresData\EresData.csproj">

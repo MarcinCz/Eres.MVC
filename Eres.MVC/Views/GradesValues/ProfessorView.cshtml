@@ -1,0 +1,62 @@
+﻿@model IEnumerable<EresData.GradeValues>
+
+@{
+    ViewBag.Title = "Grade Values - Professor View";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Grade Values - Professor View</h2>
+
+@if (TempData["Error"] != null)
+{
+    <div class="alert alert-danger fade in">
+        @{
+            var error = TempData["Error"].ToString();
+        }
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+        <strong>@error</strong>
+    </div>
+}
+
+<p>
+    @Html.ActionLink("Create New", "SelectStudent")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Registrations.Students.FirstName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Registrations.Students.LastName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Value)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Date)
+        </th>
+        <th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.Registrations.Students.FirstName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Registrations.Students.LastName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Value)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Date)
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { id=item.GradeValueID }) |
+            @Html.ActionLink("Delete", "Delete", new { id=item.GradeValueID })
+        </td>
+    </tr>
+}
+
+</table>

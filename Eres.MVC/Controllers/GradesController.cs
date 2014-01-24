@@ -8,6 +8,7 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using EresData;
+using System.Data.Entity.Infrastructure;
 
 namespace Eres.MVC.Controllers
 {
@@ -22,6 +23,7 @@ namespace Eres.MVC.Controllers
         // GET: /Grades/
         public ActionResult Index()
         {
+
             if (TempData["SubjectId"] != null && TempData["SemesterId"] != null)
             {
                var grades = gradesStorage.getGradesBySemesterAndSubject((int)TempData["SemesterId"], (int)TempData["SubjectId"]).ToList();
@@ -69,24 +71,12 @@ namespace Eres.MVC.Controllers
             
             return RedirectToAction("SelectSemester");
         }
-        // GET: /Grades/Details/5
-        //public ActionResult Details(int? id)
-        //{
-        //    if (id == null)
-        //    {
-        //        return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-        //    }
-        //    Grades grades = db.Grades.Find(id);
-        //    if (grades == null)
-        //    {
-        //        return HttpNotFound();
-        //    }
-        //    return View(grades);
-        //}
 
         // GET: /Grades/Create
         public ActionResult Create()
         {
+            if (TempData["RealisationId"] == null)
+                return RedirectToAction("SelectSemester");
             TempData["RealisationId"] = TempData["RealisationId"];
             return View();
         }
@@ -100,8 +90,14 @@ namespace Eres.MVC.Controllers
 
             if (ModelState.IsValid)
             {
-                //db.Grades.Add(grades);
-                //db.SaveChanges();
+                try
+                {
+                    gradesStorage.createGrade(grades.Name, grades.MaxValue, (int)TempData["RealisationId"]);
+                }
+                catch
+                {
+                    TempData["Error"] = "Error while creating grade";
+                }
                 return RedirectToAction("Index");
             }
             
@@ -111,6 +107,10 @@ namespace Eres.MVC.Controllers
         // GET: /Grades/Edit/5
         public ActionResult Edit(int? id)
         {
+            if (TempData["RealisationId"] == null)
+                return RedirectToAction("SelectSemester");
+            TempData["RealisationId"] = TempData["RealisationId"];
+
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
@@ -118,9 +118,10 @@ namespace Eres.MVC.Controllers
             Grades grades = db.Grades.Find(id);
             if (grades == null)
             {
-                return HttpNotFound();
+                ModelState.AddModelError("GradeNotFound", "Grade not found");
+                return RedirectToAction("Index");
             }
-            ViewBag.RealisationID = new SelectList(db.Realisations, "RealisationID", "RealisationID", grades.RealisationID);
+            //ViewBag.RealisationID = new SelectList(db.Realisations, "RealisationID", "RealisationID", grades.RealisationID);
             return View(grades);
         }
 
@@ -129,21 +130,37 @@ namespace Eres.MVC.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include="GradeID,RealisationID,Name,MaxValue,TimeStamp")] Grades grades)
+        public ActionResult Edit([Bind(Include="GradeID,Name,MaxValue,TimeStamp")] Grades grades)
         {
+            TempData["RealisationId"] = TempData["RealisationId"];
             if (ModelState.IsValid)
             {
-                db.Entry(grades).State = EntityState.Modified;
-                db.SaveChanges();
+                try
+                {
+                    grades.RealisationID = (int)TempData["RealisationId"];
+                    gradesStorage.updateGrade(grades);
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    TempData["Error"] = "Grade was already edited or deleted";
+                }
+                catch
+                {
+                    TempData["Error"] = "Error while editing grade.";
+                }
                 return RedirectToAction("Index");
             }
-            ViewBag.RealisationID = new SelectList(db.Realisations, "RealisationID", "RealisationID", grades.RealisationID);
+            //ViewBag.RealisationID = new SelectList(db.Realisations, "RealisationID", "RealisationID", grades.RealisationID);
             return View(grades);
         }
 
         // GET: /Grades/Delete/5
         public ActionResult Delete(int? id)
         {
+            if (TempData["RealisationId"] == null)
+                return RedirectToAction("SelectSemester");
+            TempData["RealisationId"] = TempData["RealisationId"];
+
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
@@ -151,7 +168,8 @@ namespace Eres.MVC.Controllers
             Grades grades = db.Grades.Find(id);
             if (grades == null)
             {
-                return HttpNotFound();
+                TempData["Error"] = "Grade not found";
+                return RedirectToAction("Index");
             }
             return View(grades);
         }
@@ -161,9 +179,14 @@ namespace Eres.MVC.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            Grades grades = db.Grades.Find(id);
-            db.Grades.Remove(grades);
-            db.SaveChanges();
+            try
+            {
+                gradesStorage.deleteGrade(id);
+            }
+            catch
+            {
+                TempData["Error"]="Error while deleting grade";
+            }
             return RedirectToAction("Index");
         }
 

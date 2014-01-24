@@ -22,10 +22,10 @@
                 <ul class="nav navbar-nav">
                     <li>@Html.ActionLink("Grades", "SelectSemester", "Grades")</li>
                     <li class="dropdown">
-                        <a href="#" data-toggle="dropdown" class="dropdown-toggle">Grades Values<b class="caret"></b></a>
+                        <a href="#" data-toggle="dropdown" class="dropdown-toggle">Grade Values<b class="caret"></b></a>
                         <ul class="dropdown-menu">
-                            <li><a href="#">@Html.ActionLink("Student", "StudentView", "GradesValues")</a></li>
-                            <li><a href="#">@Html.ActionLink("Professor", "ProfessorView", "GradesValues")</a></li>
+                            <li>@Html.ActionLink("Student", "SelectStudent", "StudentForm")</li>
+                            <li>@Html.ActionLink("Professor", "SelectSemester", "ProfessorForm")</li>
                         </ul>
                     </li>
                 </ul>

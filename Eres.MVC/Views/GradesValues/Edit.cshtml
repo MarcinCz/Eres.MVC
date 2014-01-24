@@ -1,4 +1,4 @@
-﻿@model EresData.Grades
+﻿@model EresData.GradeValues
 
 @{
     ViewBag.Title = "Edit";
@@ -13,25 +13,19 @@
     @Html.AntiForgeryToken()
     
     <div class="form-horizontal">
-        <h4>Grades</h4>
+        <h4>Grade Value</h4>
         <hr />
         @Html.ValidationSummary(true)
+        @Html.HiddenFor(model => model.GradeValueID)
         @Html.HiddenFor(model => model.GradeID)
+        @Html.HiddenFor(model => model.RegistrationID)
         @Html.HiddenFor(model => model.TimeStamp)
 
         <div class="form-group">
-            @Html.LabelFor(model => model.Name, new { @class = "control-label col-md-2" })
+            @Html.LabelFor(model => model.Value, new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.EditorFor(model => model.Name)
-                @Html.ValidationMessageFor(model => model.Name)
-            </div>
-        </div>
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.MaxValue, new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.MaxValue)
-                @Html.ValidationMessageFor(model => model.MaxValue)
+                @Html.EditorFor(model => model.Value)
+                @Html.ValidationMessageFor(model => model.Value)
             </div>
         </div>
 
@@ -44,7 +38,7 @@
 }
 
 <div>
-    @Html.ActionLink("Back to List", "Index")
+    @Html.ActionLink("Back to List", "ProfessorView", new { GradeId = Model.GradeID.ToString() })
 </div>
 
 @section Scripts {

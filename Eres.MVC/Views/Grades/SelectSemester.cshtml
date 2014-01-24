@@ -1,0 +1,16 @@
+﻿@{
+    ViewBag.Title = "Select Semester";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Select Semester</h2>
+@using (Html.BeginForm())
+{
+    <p>
+        @Html.DropDownList("SemesterId")  
+    </p>
+    <p>
+        <input class="btn" type="submit" value="Next" />
+    </p>
+}
+

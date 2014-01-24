@@ -1,0 +1,43 @@
+﻿@model IEnumerable<EresData.Registrations>
+
+
+@{
+    ViewBag.Title = "New Grade Value - Select Student";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>New Grade Value - Select Student</h2>
+
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Students.IndexNo)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Students.FirstName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Students.LastName)
+        </th>
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Students.IndexNo)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Students.FirstName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Students.LastName)
+            </td>
+            <td>
+                @Html.ActionLink("Select", "SelectStudent", new { RegistrationId = item.RegistrationID })
+            </td>
+        </tr>
+    }
+
+</table>

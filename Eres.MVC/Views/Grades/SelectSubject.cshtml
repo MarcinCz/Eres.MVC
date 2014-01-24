@@ -1,0 +1,17 @@
+﻿
+@{
+    ViewBag.Title = "Select Subject";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Select Subject</h2>
+@using (Html.BeginForm())
+{
+    <p>
+        @Html.DropDownList("SubjectId", new SelectList(ViewBag.SubjectsList, "SubjectID", "Name"))
+    </p>
+    <p>
+        <input class="btn" type="submit" value="Next"/>
+    </p>
+}
+
