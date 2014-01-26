@@ -19,15 +19,15 @@
 }
 
 <p>
-    @Html.ActionLink("Create New", "SelectStudent")
+    @Html.ActionLink("Create New", "CreateSelectStudent")
 </p>
 <table class="table">
     <tr>
         <th>
-            @Html.DisplayNameFor(model => model.Registrations.Students.FirstName)
+            @Html.DisplayNameFor(model => model.Registrations.Students.LastName)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.Registrations.Students.LastName)
+            @Html.DisplayNameFor(model => model.Registrations.Students.FirstName)
         </th>
         <th>
             @Html.DisplayNameFor(model => model.Value)
@@ -41,10 +41,10 @@
 @foreach (var item in Model) {
     <tr>
         <td>
-            @Html.DisplayFor(modelItem => item.Registrations.Students.FirstName)
+            @Html.DisplayFor(modelItem => item.Registrations.Students.LastName)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.Registrations.Students.LastName)
+            @Html.DisplayFor(modelItem => item.Registrations.Students.FirstName)
         </td>
         <td>
             @Html.DisplayFor(modelItem => item.Value)

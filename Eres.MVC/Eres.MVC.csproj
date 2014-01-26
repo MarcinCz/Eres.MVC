@@ -176,7 +176,7 @@
     <Content Include="Views\ProfessorForm\SelectSemester.cshtml" />
     <Content Include="Views\ProfessorForm\SelectSubject.cshtml" />
     <Content Include="Views\ProfessorForm\SelectGrade.cshtml" />
-    <Content Include="Views\GradesValues\SelectStudent.cshtml" />
+    <Content Include="Views\GradesValues\CreateSelectStudent.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Eres.NET\EresData\EresData.csproj">

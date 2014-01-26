@@ -18,21 +18,15 @@ namespace Eres.MVC.Controllers
         private RealisationsStorage realisationsStorage = new RealisationsStorage();
         private SubjectsStorage subjectsStorage = new SubjectsStorage();
         private SemestersStorage semestersStorage = new SemestersStorage();
-        private GradesStorage gradesStorage = new GradesStorage();
+        public GradesStorage gradesStorage = new GradesStorage();
 
         // GET: /Grades/
         public ActionResult Index()
         {
-
-            if (TempData["SubjectId"] != null && TempData["SemesterId"] != null)
-            {
-               var grades = gradesStorage.getGradesBySemesterAndSubject((int)TempData["SemesterId"], (int)TempData["SubjectId"]).ToList();
-               TempData["RealisationId"] = realisationsStorage.getRealisationBySubjectAndSemester((int)TempData["SubjectId"], (int)TempData["SemesterId"]).RealisationID;
-               return View(grades);
-            }
             if (TempData["RealisationId"] != null)
             {
                 var grades = gradesStorage.getGrades().Where(g => g.RealisationID == (int)TempData["RealisationId"]).ToList();
+                grades.Sort((x, y) => x.Name.CompareTo(y.Name));
                 TempData["RealisationId"] = TempData["RealisationId"];
                 return View(grades);
             }
@@ -45,6 +39,7 @@ namespace Eres.MVC.Controllers
             if (!int.TryParse(SemesterId, out semesterId))
             {
                 var semestersList = semestersStorage.getSemesters();
+                semestersList.Sort((x, y) => x.Name.CompareTo(y.Name));
                 ViewBag.SemesterId = new SelectList(semestersList, "SemesterID", "Name");
                 return View();
             }
@@ -57,13 +52,13 @@ namespace Eres.MVC.Controllers
             int subjectId;
             if (!String.IsNullOrEmpty(SubjectId) && int.TryParse(SubjectId, out subjectId))
             {
-                TempData["SemesterId"] = TempData["SemesterId"];
-                TempData["SubjectId"] = subjectId;
+                var realisation = realisationsStorage.getRealisationBySubjectAndSemester(subjectId, (int)TempData["SemesterId"]);
+                TempData["RealisationId"] = realisation.RealisationID;
                 return RedirectToAction("Index");
             }
             if (TempData["SemesterId"] != null)
-            {          
-                ViewBag.SubjectsList = subjectsStorage.getSubjectsBySemester((int)TempData["SemesterId"]);
+            {   
+                ViewBag.SubjectsList = subjectsStorage.getSubjectsBySemester((int)TempData["SemesterId"]).OrderBy(s => s.Name);
                 TempData["SemesterId"] = TempData["SemesterId"];
                 return View();
             }
@@ -118,10 +113,9 @@ namespace Eres.MVC.Controllers
             Grades grades = db.Grades.Find(id);
             if (grades == null)
             {
-                ModelState.AddModelError("GradeNotFound", "Grade not found");
+                TempData["Error"] = "Grade not found";
                 return RedirectToAction("Index");
             }
-            //ViewBag.RealisationID = new SelectList(db.Realisations, "RealisationID", "RealisationID", grades.RealisationID);
             return View(grades);
         }
 

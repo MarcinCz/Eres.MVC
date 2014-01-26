@@ -22,7 +22,7 @@ namespace Eres.MVC.Controllers
         {
             if (StudentId == null)
             {
-                var students = studentsStorage.getStudents();
+                var students = studentsStorage.getStudents().OrderBy(s => s.LastName);
                 return View(students);
             }
             TempData["StudentId"] = StudentId;
@@ -35,7 +35,7 @@ namespace Eres.MVC.Controllers
             if (TempData["StudentId"] == null)
                 return RedirectToAction("SelectStudent");
 
-            var semesters = semestersStorage.getSemestersByStudent((int)TempData["StudentId"]);
+            var semesters = semestersStorage.getSemestersByStudent((int)TempData["StudentId"]).OrderBy(s => s.Name);
             ViewBag.SemesterId = new SelectList(semesters, "SemesterId", "Name");
             TempData["StudentId"] = TempData["StudentId"];
             return View();
@@ -64,7 +64,7 @@ namespace Eres.MVC.Controllers
             if (TempData["StudentId"] == null || TempData["SemesterId"] == null)
                 return RedirectToAction("SelectStudent");
 
-            var subjects = subjectsStorage.getSubjectsByStudentAndSemester((int)TempData["StudentId"], (int)TempData["SemesterId"]);
+            var subjects = subjectsStorage.getSubjectsByStudentAndSemester((int)TempData["StudentId"], (int)TempData["SemesterId"]).OrderBy(s => s.Name);
             ViewBag.SubjectId = new SelectList(subjects, "SubjectId", "Name");
             TempData["StudentId"] = TempData["StudentId"];
             TempData["SemesterId"] = TempData["SemesterId"];

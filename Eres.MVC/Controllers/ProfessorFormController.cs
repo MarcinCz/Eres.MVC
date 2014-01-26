@@ -20,7 +20,7 @@ namespace Eres.MVC.Controllers
         [HttpGet]
         public ActionResult SelectSemester()
         {
-            var semesters = semestersStorage.getSemesters();
+            var semesters = semestersStorage.getSemesters().OrderBy(s => s.Name);
             ViewBag.SemesterId = new SelectList(semesters, "SemesterId", "Name");
             return View();
         }
@@ -45,7 +45,7 @@ namespace Eres.MVC.Controllers
             if (TempData["SemesterId"] == null)
                 return RedirectToAction("SelectSemester");
 
-            var subjects = subjectsStorage.getSubjectsBySemester((int)TempData["SemesterId"]);
+            var subjects = subjectsStorage.getSubjectsBySemester((int)TempData["SemesterId"]).OrderBy(s => s.Name);
             ViewBag.SubjectId = new SelectList(subjects, "SubjectId", "Name");
             TempData["SemesterId"] = TempData["SemesterId"];
             return View();

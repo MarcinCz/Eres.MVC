@@ -30,9 +30,11 @@ namespace Eres.MVC.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            var gradevalues = db.GradeValues.Where(g => g.GradeID == gradeId).Include(g => g.Registrations.Students);
+            var gradevalues = db.GradeValues.Where(g => g.GradeID == gradeId).Include(g => g.Registrations.Students).ToList();
+            //gradevalues = gradevalues.OrderBy(g => g.Registrations.Students.LastName);
+            gradevalues.Sort((x, y) => x.Registrations.Students.LastName.CompareTo(y.Registrations.Students.LastName));
             TempData["GradeId"] = gradeId;
-            return View(gradevalues.ToList());
+            return View(gradevalues);
         }
 
      
@@ -46,17 +48,18 @@ namespace Eres.MVC.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            var gradevalues = db.GradeValues.Where(g => g.RegistrationID == registrationId).Include(g => g.Grades);
-            return View(gradevalues.ToList());
+            var gradevalues = db.GradeValues.Where(g => g.RegistrationID == registrationId).Include(g => g.Grades).ToList();
+            return View(gradevalues);
         }
 
-        public ActionResult SelectStudent(int? RegistrationId)
+        public ActionResult CreateSelectStudent(int? RegistrationId)
         {
             if (TempData["GradeId"] == null)
                 return RedirectToAction("SelectSemester", "ProfessorForm");
             if (RegistrationId == null)
             {
                 var registrations = registrationsStorage.getRegistrationsWithoutGrade((int)TempData["GradeId"]);
+                registrations.Sort((x, y) => x.Students.LastName.CompareTo(y.Students.LastName));
                 TempData["GradeId"] = TempData["GradeId"];
                 return View(registrations);
             }
@@ -90,6 +93,10 @@ namespace Eres.MVC.Controllers
                 try
                 {
                     gradeValuesStorage.createGradeValue(gradevalues.Value, (int)TempData["RegistrationId"], (int)TempData["GradeId"]);
+                }
+                catch (GradeValueFormatException exc)
+                {
+                    TempData["Error"] = exc.Message;
                 }
                 catch
                 {
@@ -168,10 +175,9 @@ namespace Eres.MVC.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            GradeValues gradevalues = db.GradeValues.Find(id);
             try
             {
-                gradeValuesStorage.deleteGradeValue(gradevalues);
+                gradeValuesStorage.deleteGradeValue(id);
             }
             catch
             {

@@ -13,10 +13,10 @@
             @Html.DisplayNameFor(model => model.IndexNo)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.FirstName)
+            @Html.DisplayNameFor(model => model.LastName)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.LastName)
+            @Html.DisplayNameFor(model => model.FirstName)
         </th>
         <th></th>
     </tr>
@@ -28,10 +28,10 @@
                 @Html.DisplayFor(modelItem => item.IndexNo)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.FirstName)
+                @Html.DisplayFor(modelItem => item.LastName)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.LastName)
+                @Html.DisplayFor(modelItem => item.FirstName)
             </td>
             <td>
                 @Html.ActionLink("Select", "SelectStudent", new { StudentId = item.StudentID})
