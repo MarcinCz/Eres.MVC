@@ -50,20 +50,25 @@ namespace Eres.MVC.Controllers
         public ActionResult SelectSubject(string SubjectId)
         {
             int subjectId;
+            if(TempData["SemesterId"] == null)
+            {
+                return RedirectToAction("SelectSemester");
+            }
+
             if (!String.IsNullOrEmpty(SubjectId) && int.TryParse(SubjectId, out subjectId))
             {
                 var realisation = realisationsStorage.getRealisationBySubjectAndSemester(subjectId, (int)TempData["SemesterId"]);
                 TempData["RealisationId"] = realisation.RealisationID;
                 return RedirectToAction("Index");
             }
+
             if (TempData["SemesterId"] != null)
             {   
                 ViewBag.SubjectsList = subjectsStorage.getSubjectsBySemester((int)TempData["SemesterId"]).OrderBy(s => s.Name);
                 TempData["SemesterId"] = TempData["SemesterId"];
                 return View();
             }
-           
-            
+                 
             return RedirectToAction("SelectSemester");
         }
 

@@ -30,9 +30,7 @@ namespace Eres.MVC.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            var gradevalues = db.GradeValues.Where(g => g.GradeID == gradeId).Include(g => g.Registrations.Students).ToList();
-            //gradevalues = gradevalues.OrderBy(g => g.Registrations.Students.LastName);
-            gradevalues.Sort((x, y) => x.Registrations.Students.LastName.CompareTo(y.Registrations.Students.LastName));
+            var gradevalues = db.GradeValues.Where(g => g.GradeID == gradeId).Include(g => g.Registrations.Students).ToList().OrderBy(g => g.Registrations.Students.LastName);
             TempData["GradeId"] = gradeId;
             return View(gradevalues);
         }
